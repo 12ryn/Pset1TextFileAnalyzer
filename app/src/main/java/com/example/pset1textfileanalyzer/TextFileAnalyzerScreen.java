@@ -17,6 +17,8 @@ import androidx.core.view.WindowInsetsCompat;
 import org.w3c.dom.Text;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class TextFileAnalyzerScreen extends AppCompatActivity {
 
@@ -76,10 +78,12 @@ public class TextFileAnalyzerScreen extends AppCompatActivity {
             public void onClick(View view) {
 
                 nameOfFile = String.valueOf(fileName.getText());
+                ArrayList<String> cmWords = new ArrayList<>();
+                Map<String, Integer> map = new HashMap<>();
 
-                TextAnalyze analysis = new TextAnalyze("commonWords.txt", "textOne.txt");
+                TextAnalyze analysis = new TextAnalyze(cmWords, map, nameOfFile);
 
-                String str = analysis.printTopWords(5);
+                String str = analysis.getTop5();
 
                 answer.setText(str);
 
@@ -102,8 +106,13 @@ public class TextFileAnalyzerScreen extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                answer.setText("The number of unique words are: \nThe top unique words are: ");
+                nameOfFile = String.valueOf(fileName.getText());
+                ArrayList<String> cmWords = new ArrayList<>();
+                Map<String, Integer> map = new HashMap<>();
 
+                TextAnalyze analysis = new TextAnalyze(cmWords, map, nameOfFile);
+
+                answer.setText(analysis.countUniqueWords());
             }
         });
 
@@ -113,7 +122,13 @@ public class TextFileAnalyzerScreen extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                answer.setText("There are _ total sentences.");
+                nameOfFile = String.valueOf(fileName.getText());
+                ArrayList<String> cmWords = new ArrayList<>();
+                Map<String, Integer> map = new HashMap<>();
+
+                TextAnalyze analysis = new TextAnalyze(cmWords, map, nameOfFile);
+
+                answer.setText(analysis.countTotalSentences());
             }
         });
 
@@ -123,31 +138,16 @@ public class TextFileAnalyzerScreen extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                answer.setText("There are _ total words.");
+                nameOfFile = String.valueOf(fileName.getText());
+                ArrayList<String> cmWords = new ArrayList<>();
+                Map<String, Integer> map = new HashMap<>();
+
+                TextAnalyze analysis = new TextAnalyze(cmWords, map, nameOfFile);
+
+                answer.setText(analysis.countTotalWords());
 
             }
         });
 
-    }
-
-    private void printTopFive(String[] topFiveWords, int[] topFiveFrequencies, int count) {
-        for (int i = 0; i < topFiveWords.length; ++i) {
-            if (i == 0) {
-                displayString += (i+1 + ") " + topFiveWords[i] + ": " + topFiveFrequencies[i]);
-                displayString += "\n\n";
-            }
-
-            else {
-                if (topFiveFrequencies[i] == topFiveFrequencies[i-1]) {
-                    count++;
-                    displayString += (i+1-count + ") " + topFiveWords[i] + ": " + topFiveFrequencies[i]);
-                    displayString += "\n\n";
-                } else {
-                    count = 0;
-                    displayString += (i+1 + ") " + topFiveWords[i] + ": " + topFiveFrequencies[i]);
-                    displayString += "\n\n";
-                }
-            }
-        }
     }
 }

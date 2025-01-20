@@ -4,76 +4,119 @@ import java.util.*;
 import java.io.*;
 
 public class TextAnalyze {
-    private List<String> words;
-    private List<Integer> counts;
 
-    // Constructor to load common words and analyze the text
-    public TextAnalyze(String commonWordsFilePath, String textFilePath) {
-        words = new ArrayList<>();
-        counts = new ArrayList<>();
-        List<String> commonWords = loadCommonWords(commonWordsFilePath);
-        countWords(textFilePath, commonWords);
+    private ArrayList<String> commonWords;
+    private Map<String, Integer> map;
+
+    private String fileName;
+
+    public TextAnalyze(ArrayList<String> commonWords, Map<String, Integer> map, String fileName) {
+        this.commonWords = commonWords;
+        this.map = map;
+        this.fileName = fileName;
+    }
+    // New method to read files
+    private void readFiles() {
+        readCommonWords();
+        readMainTextFile();
     }
 
-    // Load common words from a file
-    private List<String> loadCommonWords(String filePath) {
-        List<String> commonWords = new ArrayList<>();
-        try (Scanner common = new Scanner(new File(filePath))) {
+    private void readCommonWords() {
+        try (InputStream inputStream = getClass().getResourceAsStream("/commonWords.txt");
+             Scanner common = new Scanner(inputStream)) {
             while (common.hasNext()) {
                 String commonWord = common.next().toLowerCase();
                 commonWords.add(commonWord);
             }
-        } catch (FileNotFoundException e) {
-            System.err.println("Error: Common words file not found at " + filePath);
+        } catch (NullPointerException e) {
+            System.err.println("Error: Common words file not found.");
+            e.printStackTrace();
+        } catch (IOException e) {
+            System.err.println("Error reading common words file.");
+            e.printStackTrace();
         }
-        return commonWords;
     }
 
-    // Count words in the target text file, excluding common words
-    private void countWords(String filePath, List<String> commonWords) {
-        Map<String, Integer> wordFrequencyMap = new HashMap<>();
-        try (Scanner scanner = new Scanner(new File(filePath))) {
+    private void readMainTextFile() {
+        try (InputStream inputStream = getClass().getResourceAsStream(fileName);
+             Scanner scanner = new Scanner(inputStream)) {
             while (scanner.hasNext()) {
-                // Extract words, keeping valid characters like apostrophes for contraction handling
-                String word = scanner.next().toLowerCase().replaceAll("[^a-z']", "");
+                String word = scanner.next().toLowerCase().replaceAll("[^a-z]", ""); // Remove non-alphabetic characters
                 if (!commonWords.contains(word) && !word.isEmpty()) {
-                    wordFrequencyMap.put(word, wordFrequencyMap.getOrDefault(word, 0) + 1);
+                    map.put(word, map.getOrDefault(word, 0) + 1); // Increment word count
                 }
             }
-        } catch (FileNotFoundException e) {
-            System.err.println("Error: Text file not found at " + filePath);
-        }
-
-        // Convert the map to lists for sorting
-        List<Map.Entry<String, Integer>> entryList = new ArrayList<>(wordFrequencyMap.entrySet());
-
-        // Sort the entries by their frequencies in descending order
-        entryList.sort((e1, e2) -> e2.getValue().compareTo(e1.getValue()));
-
-        // Populate the words and counts lists
-        for (Map.Entry<String, Integer> entry : entryList) {
-            words.add(entry.getKey());
-            counts.add(entry.getValue());
+        } catch (NullPointerException e) {
+            System.err.println("Error: Text file not found.");
+            e.printStackTrace();
+        } catch (IOException e) {
+            System.err.println("Error reading text file.");
+            e.printStackTrace();
         }
     }
 
-    // Method to get the top 'n' words with the most occurrences
-    public String printTopWords(int n) {
-        StringBuilder result = new StringBuilder();
-        result.append("Top ").append(n).append(" words with the most occurrences:\n");
-        for (int i = 0; i < Math.min(n, words.size()); i++) {
-            result.append(words.get(i)).append(": ").append(counts.get(i)).append("\n");
+    public String getTop5() {
+        readFiles();
+
+        // entries by value (word frequency) in descending order
+        List<Map.Entry<String, Integer>> wordList = new ArrayList<>(map.entrySet());
+        wordList.sort((a, b) -> b.getValue().compareTo(a.getValue())); // Compare by word frequency
+
+        if (wordList.isEmpty()) { // case where no significant words are found
+
+            return "No significant words found in the text.";
         }
+
+        // Build the result string
+        StringBuilder result = new StringBuilder("Top 5 words with the most occurrences:\n");
+        for (int i = 0; i < Math.min(5, wordList.size()); i++) {
+            result.append(wordList.get(i).getKey());
+            result.append(": ");
+            result.append(wordList.get(i).getValue());
+            result.append("\n");
+        }
+
         return result.toString();
     }
 
-    // Getter for word list (optional, for further processing)
-    public List<String> getWords() {
-        return words;
+    // Method to count total words
+    public int countTotalWords() {
+        readFiles(); // Read files before counting
+        return map.values().stream().mapToInt(Integer::intValue).sum();
     }
 
-    // Getter for counts list (optional, for further processing)
-    public List<Integer> getCounts() {
-        return counts;
+    // Method to count total sentences
+    public int countTotalSentences() {
+        int sentenceCount = 0;
+        try (InputStream inputStream = getClass().getResourceAsStream(fileName);
+             Scanner scanner = new Scanner(inputStream)) {
+            while (scanner.hasNextLine()) {
+                String line = scanner.nextLine();
+                // Consider a sentence to end with '.', '!', or '?'
+                sentenceCount += line.split("[.!?]").length;
+            }
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+            System.out.println("Error: Text file not found.");
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        return sentenceCount;
+    }
+
+    // Method to count unique words and display some of them
+    public String countUniqueWords() {
+        readFiles(); // Read files before counting unique words
+        Set<String> uniqueWords = map.keySet();
+        StringBuilder result = new StringBuilder("Total unique words: " + uniqueWords.size() + "\nSome unique words:\n");
+
+        int count = 0;
+        for (String word : uniqueWords) {
+            result.append(word).append("\n");
+            count++;
+            if (count >= 5) break; // Display up to 5 unique words
+        }
+
+        return result.toString();
     }
 }
