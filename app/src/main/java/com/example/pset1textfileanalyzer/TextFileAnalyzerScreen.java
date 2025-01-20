@@ -14,8 +14,14 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import org.w3c.dom.Text;
+
+import java.util.ArrayList;
+
 public class TextFileAnalyzerScreen extends AppCompatActivity {
 
+    private String nameOfFile;
+    private static String displayString;
     private Button backButton;
     private Button pieChartButton;
     private Button top5WordsButton;
@@ -43,7 +49,6 @@ public class TextFileAnalyzerScreen extends AppCompatActivity {
 
         fileName = (EditText) findViewById(R.id.editTextText);
 
-
         backButton = (Button) findViewById(R.id.button4);
 
         backButton.setOnClickListener(new View.OnClickListener() {
@@ -70,6 +75,24 @@ public class TextFileAnalyzerScreen extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
+                nameOfFile = String.valueOf(fileName.getText());
+
+                TextAnalyze analysis = new TextAnalyze("commonWords.txt", "textOne.txt");
+
+                String str = analysis.printTopWords(5);
+
+                answer.setText(str);
+
+//                Top5Analyzer topFive = new Top5Analyzer(nameOfFile, "commonWords.txt");
+//
+//                String[] topFiveWords = topFive.topFiveWords();
+//                int[] topFiveFrequencies = topFive.topFiveWordsFrequency();
+//
+//                displayString = "The top " + topFiveWords.length + " words in "+ fileName +" are:\n";
+//                printTopFive(topFiveWords, topFiveFrequencies, 0);
+//
+//                answer.setText(displayString);
+
             }
         });
 
@@ -78,6 +101,8 @@ public class TextFileAnalyzerScreen extends AppCompatActivity {
         topUniqueWordsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+                answer.setText("The number of unique words are: \nThe top unique words are: ");
 
             }
         });
@@ -88,6 +113,7 @@ public class TextFileAnalyzerScreen extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
+                answer.setText("There are _ total sentences.");
             }
         });
 
@@ -97,8 +123,31 @@ public class TextFileAnalyzerScreen extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
+                answer.setText("There are _ total words.");
+
             }
         });
 
+    }
+
+    private void printTopFive(String[] topFiveWords, int[] topFiveFrequencies, int count) {
+        for (int i = 0; i < topFiveWords.length; ++i) {
+            if (i == 0) {
+                displayString += (i+1 + ") " + topFiveWords[i] + ": " + topFiveFrequencies[i]);
+                displayString += "\n\n";
+            }
+
+            else {
+                if (topFiveFrequencies[i] == topFiveFrequencies[i-1]) {
+                    count++;
+                    displayString += (i+1-count + ") " + topFiveWords[i] + ": " + topFiveFrequencies[i]);
+                    displayString += "\n\n";
+                } else {
+                    count = 0;
+                    displayString += (i+1 + ") " + topFiveWords[i] + ": " + topFiveFrequencies[i]);
+                    displayString += "\n\n";
+                }
+            }
+        }
     }
 }

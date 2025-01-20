@@ -11,10 +11,10 @@
         android:id="@+id/textView2"
         android:layout_width="250dp"
         android:layout_height="100dp"
-        android:textSize="20dp"
-        android:gravity="center"
         android:layout_marginTop="125dp"
+        android:gravity="center"
         android:text="Welcome to the Random Text File Generator. Please type in a temperature from 1-100:"
+        android:textSize="20dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
@@ -38,16 +38,23 @@
         android:height="100dp"
         android:text="Generate PDF"
         android:textSize="25dp"
-        tools:layout_editor_absoluteX="80dp"
-        tools:layout_editor_absoluteY="470dp" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.496"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/temperatureInput"
+        app:layout_constraintVertical_bias="0.348" />
 
     <EditText
-        android:id="@+id/editTextNumber"
+        android:id="@+id/temperatureInput"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="100dp"
         android:ems="10"
-        android:inputType="number"
         android:hint="Enter your number here:"
-        tools:layout_editor_absoluteX="98dp"
-        tools:layout_editor_absoluteY="318dp" />
+        android:inputType="number"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView2" />
 </androidx.constraintlayout.widget.ConstraintLayout>
