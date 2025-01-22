@@ -13,18 +13,6 @@
         android:theme="@style/Theme.Pset1TextFileAnalyzer"
         tools:targetApi="31">
         <activity
-            android:name=".TopUniqueWords"
-            android:exported="false" />
-        <activity
-            android:name=".Top5Words"
-            android:exported="false" />
-        <activity
-            android:name=".WordCount"
-            android:exported="false" />
-        <activity
-            android:name=".SentenceCount"
-            android:exported="false" />
-        <activity
             android:name=".PieChart"
             android:exported="false" />
         <activity

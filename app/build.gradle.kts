@@ -6,6 +6,7 @@ android {
     namespace = "com.example.pset1textfileanalyzer"
     compileSdk = 35
 
+
     defaultConfig {
         applicationId = "com.example.pset1textfileanalyzer"
         minSdk = 24
@@ -29,6 +30,12 @@ android {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
     }
+    packaging {
+        resources {
+            excludes.add("META-INF/DEPENDENCIES")
+        }
+    }
+
 }
 
 dependencies {
@@ -40,4 +47,7 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
+    implementation(libs.pdfbox)
+    implementation(libs.itext7.core)
+
 }

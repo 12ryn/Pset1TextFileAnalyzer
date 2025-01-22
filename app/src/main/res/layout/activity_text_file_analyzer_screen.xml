@@ -10,14 +10,15 @@
     <TextView
         android:id="@+id/textView3"
         android:layout_width="250dp"
-        android:layout_height="100dp"
+        android:layout_height="200dp"
         android:layout_marginStart="150dp"
-        android:layout_marginTop="125dp"
+        android:layout_marginTop="60dp"
         android:layout_marginEnd="150dp"
         android:gravity="center"
         android:text="Welcome to the Text File Analyzer. Please enter the name of your file below:"
         android:textSize="20dp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.503"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -35,7 +36,7 @@
         android:id="@+id/editTextText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="46dp"
+        android:layout_marginTop="25dp"
         android:ems="10"
         android:hint="File Name"
         android:inputType="text"

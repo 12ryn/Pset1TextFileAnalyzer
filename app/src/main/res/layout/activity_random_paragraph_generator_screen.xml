@@ -11,12 +11,12 @@
         android:id="@+id/textView2"
         android:layout_width="250dp"
         android:layout_height="100dp"
-        android:layout_marginTop="125dp"
+        android:layout_marginTop="60dp"
         android:gravity="center"
         android:text="Welcome to the Random Text File Generator. Please type in a temperature from 1-100:"
         android:textSize="20dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -31,25 +31,25 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/button5"
+        android:id="@+id/generationTrigger"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:width="250dp"
         android:height="100dp"
-        android:text="Generate PDF"
+        android:text="Generate"
         android:textSize="25dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/temperatureInput"
-        app:layout_constraintVertical_bias="0.348" />
+        app:layout_constraintVertical_bias="0.084" />
 
     <EditText
         android:id="@+id/temperatureInput"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="100dp"
+        android:layout_marginTop="120dp"
         android:ems="10"
         android:hint="Enter your number here:"
         android:inputType="number"
@@ -57,4 +57,28 @@
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView2" />
+
+    <EditText
+        android:id="@+id/fileName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:ems="10"
+        android:hint="Enter your text file here:"
+        android:inputType="text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView2" />
+
+    <TextView
+        android:id="@+id/outputText"
+        android:layout_width="325dp"
+        android:layout_height="350dp"
+        android:layout_marginBottom="28dp"
+        android:gravity="center"
+        android:text="TextView"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>
