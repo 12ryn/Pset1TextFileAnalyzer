@@ -281,7 +281,6 @@ public class TextFileAnalyzerScreen extends AppCompatActivity {
         if (flag == 0) { // pie chart flag
 
 
-
         } else if (flag == 1) { // top 5 words flag
 
             result.append("Top 5 Words: \n");

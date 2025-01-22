@@ -84,7 +84,7 @@ public class RandomParagraphGeneratorScreen extends AppCompatActivity {
                     List<String> commonWords = Arrays.asList(commonWordsContent.split("\\s+"));
                     Set<String> commonWordSet = new HashSet<>(commonWords);
                     int temp = Integer.parseInt(temperature.getText().toString().trim());
-                    answer.setText(analyzer(textContent, commonWordSet, temp));
+                    answer.setText(randomParagraph(textContent, commonWordSet, temp));
 
                 }
 
@@ -95,10 +95,10 @@ public class RandomParagraphGeneratorScreen extends AppCompatActivity {
 
     public String readAsset(String fileName){
 
-        if(fileName.toLowerCase().endsWith(".txt")){
+        AssetManager assetManager = getAssets();
+        StringBuilder content = new StringBuilder(); // sb is used to accumulate content
 
-            AssetManager assetManager = getAssets();
-            StringBuilder content = new StringBuilder();
+        if(fileName.toLowerCase().endsWith(".txt")){
 
             try (InputStream inputStream = assetManager.open(fileName);
                  BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))) {
@@ -107,16 +107,14 @@ public class RandomParagraphGeneratorScreen extends AppCompatActivity {
                 while ((line = reader.readLine()) != null) {
                     content.append(line).append("\n");
                 }
-            } catch (IOException e) {
-                return "Error reading text file: " + e.getMessage();
+
+            } catch (IOException e) { // IO exception will occur if text file is not read
+                return "Error reading text file: " + e.getMessage(); // get the message from the error and display it to user
             }
 
             return content.toString();
 
         } else if (fileName.toLowerCase().endsWith(".pdf")){
-
-            AssetManager assetManager = getAssets();
-            StringBuilder content = new StringBuilder();
 
             try (InputStream inputStream = assetManager.open(fileName)){
 
@@ -134,13 +132,13 @@ public class RandomParagraphGeneratorScreen extends AppCompatActivity {
 
         } else {
 
-            return "Error: File format unsupported";
+            return "Please only input .txt or .pdf files!";
 
         }
 
     }
 
-    public String analyzer(String text, Set<String> commonWords, int temperature) {
+    public String randomParagraph(String text, Set<String> commonWords, int temperature) {
 
         if(temperature > 100 || temperature < 0){
 
@@ -148,33 +146,32 @@ public class RandomParagraphGeneratorScreen extends AppCompatActivity {
 
         }
 
-        // Make text lowercase for ease of identification
+        // make text lowercase for ease of identification
         text = text.toLowerCase().replaceAll("[^a-zA-Z0-9.\'\\s]", "");
 
-        // Insert words into arrays for easy implementation
-        String[] words = text.split("\\s+");
+        String[] words = text.split("\\s+"); // put words into array
 
-        // Unique words
-        Set<String> uniqueWords = Arrays.stream(words)
-                .filter(word -> !commonWords.contains(word))
+        // prepare unique words
+        Set<String> uniqueWords = Arrays.stream(words) // convert array into stream
+                .filter(word -> !commonWords.contains(word)) // prevent commonWords from entering stream
                 .collect(Collectors.toSet());
 
-        // Prepare to generate a random paragraph
+
         StringBuilder paragraph = new StringBuilder();
         Random random = new Random();
-        int wordCount = 150; // Number of words in the generated paragraph
+        int wordCount = 250;
 
         for (int i = 0; i < wordCount; i++) {
-            // Decide whether to use a unique or common word based on temperature
-            boolean useUniqueWord = random.nextInt(100) < temperature;
 
-            String word;
+            boolean useUniqueWord = random.nextInt(100) < temperature; // whether a unique or common word is used is based on temperature
+
+            String word = "";
             if (useUniqueWord && !uniqueWords.isEmpty()) {
-                // Select a random unique word
-                word = uniqueWords.toArray(new String[0])[random.nextInt(uniqueWords.size())];
+                // random unique word
+                word = uniqueWords.toArray(new String[0])[random.nextInt(uniqueWords.size())]; // logic is derived from src: GPT 3.5 on POE
             } else {
-                // Select a random common word
-                word = commonWords.stream().skip(random.nextInt(commonWords.size())).findFirst().orElse("the"); // Fallback to "the" if common words are empty
+                // random common word
+                word = commonWords.stream().skip(random.nextInt(commonWords.size())).findFirst().orElse("the"); // if common words are empty, "the" will be used by default
             }
 
             paragraph.append(word).append(" ");
